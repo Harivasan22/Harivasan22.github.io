@@ -3,17 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Harivasan S // Senior Offensive Security Portfolio</title>
+    <title>Harivasan S // Offensive Security & Red Team Engineering</title>
     <style>
         :root {
-            --bg-dark: #080c10;
-            --surface-dark: #0d131a;
+            --bg-dark: #05070a;
+            --surface-dark: rgba(13, 19, 26, 0.85);
+            --surface-card: rgba(22, 30, 41, 0.7);
             --border-color: #1f2937;
             --neon-green: #00ff66;
             --neon-blue: #00d2ff;
             --neon-red: #ff3366;
             --text-main: #f3f4f6;
             --text-muted: #9ca3af;
+            --glow-blue: rgba(0, 210, 255, 0.25);
+            --glow-green: rgba(0, 255, 102, 0.25);
         }
 
         * {
@@ -25,79 +28,105 @@
         body {
             background-color: var(--bg-dark);
             color: var(--text-main);
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
             padding: 40px 20px;
             line-height: 1.6;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Ambient Background Canvas */
+        #bg-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: -1;
+            opacity: 0.15;
+            pointer-events: none;
         }
 
         .container {
-            max-width: 1050px;
+            max-width: 1100px;
             margin: 0 auto;
+            position: relative;
+            z-index: 1;
         }
 
-        /* Top Header Grid */
+        /* Glassmorphism Header */
         header {
             background: var(--surface-dark);
             border: 1px solid var(--border-color);
             border-top: 4px solid var(--neon-blue);
-            border-radius: 8px;
-            padding: 30px;
+            border-radius: 12px;
+            padding: 35px;
             margin-bottom: 30px;
+            backdrop-filter: blur(8px);
             display: flex;
             justify-content: space-between;
             align-items: center;
             flex-wrap: wrap;
             gap: 20px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.4);
         }
 
         .profile-title h1 {
-            font-size: 2.2rem;
+            font-size: 2.5rem;
             letter-spacing: -0.5px;
             color: #fff;
+            text-shadow: 0 0 10px rgba(255,255,255,0.1);
         }
 
         .profile-title p {
             color: var(--neon-blue);
             font-family: monospace;
-            font-size: 1rem;
+            font-size: 1.05rem;
             margin-top: 5px;
         }
 
         .location {
             color: var(--text-muted);
             font-size: 0.9rem;
-            margin-top: 4px;
+            margin-top: 6px;
         }
 
-        /* Interactive Modern Console Area */
+        /* Modernized CLI Terminal */
         .console-box {
-            background: #04070a;
+            background: rgba(4, 7, 10, 0.9);
             border: 1px solid var(--border-color);
-            border-radius: 8px;
-            padding: 20px;
+            border-radius: 12px;
+            padding: 25px;
             font-family: monospace;
             margin-bottom: 40px;
+            backdrop-filter: blur(10px);
+            box-shadow: inset 0 0 20px rgba(0,0,0,0.6);
         }
 
         .console-header {
             color: var(--text-muted);
             font-size: 0.85rem;
-            margin-bottom: 12px;
+            margin-bottom: 15px;
             display: flex;
             justify-content: space-between;
-            border-bottom: 1px solid #141b24;
-            padding-bottom: 8px;
+            border-bottom: 1px solid rgba(31, 41, 55, 0.5);
+            padding-bottom: 10px;
         }
 
         .console-input-area {
             display: flex;
             align-items: center;
-            margin-top: 10px;
+            margin-top: 15px;
+            background: rgba(255,255,255,0.02);
+            padding: 8px 12px;
+            border-radius: 6px;
+            border: 1px solid rgba(255,255,255,0.05);
         }
 
         .console-prompt {
             color: var(--neon-green);
-            margin-right: 10px;
+            margin-right: 12px;
+            font-weight: bold;
         }
 
         .console-input {
@@ -112,65 +141,91 @@
 
         .console-output {
             margin-top: 12px;
-            color: #d1d5db;
+            color: #e5e7eb;
             white-space: pre-wrap;
             font-size: 0.95rem;
+            min-height: 40px;
+            border-left: 2px solid var(--border-color);
+            padding-left: 15px;
         }
 
-        /* Interactive Visual Certifications Grid */
-        .cert-section {
+        h2 {
+            font-size: 1.4rem;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        /* Interactive Credential & Project Cards with Hover Effects */
+        .grid-3 {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 25px;
             margin-bottom: 40px;
         }
 
-        .cert-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 20px;
-            margin-top: 15px;
-        }
-
-        .cert-card {
-            background: var(--surface-dark);
+        .interactive-card {
+            background: var(--surface-card);
             border: 1px solid var(--border-color);
-            border-radius: 8px;
-            padding: 20px;
+            border-radius: 12px;
+            padding: 25px;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
-            transition: all 0.3s ease;
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
             position: relative;
             overflow: hidden;
+            backdrop-filter: blur(4px);
         }
 
-        .cert-card:hover {
-            transform: translateY(-3px);
+        /* Tech Mesh Pseudo-Layer */
+        .interactive-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(rgba(0,210,255,0.03) 1px, transparent 1px),
+                        linear-gradient(90deg, rgba(0,210,255,0.03) 1px, transparent 1px);
+            background-size: 20px 20px;
+            opacity: 0;
+            transition: opacity 0.4s ease;
+            pointer-events: none;
+        }
+
+        .interactive-card:hover::before {
+            opacity: 1;
+        }
+
+        .interactive-card:hover {
+            transform: translateY(-5px);
             border-color: var(--neon-blue);
-            box-shadow: 0 4px 20px rgba(0, 210, 255, 0.15);
+            box-shadow: 0 12px 30px var(--glow-blue);
         }
 
-        .cert-card.red-team:hover {
+        .interactive-card.red-team-edge:hover {
             border-color: var(--neon-red);
-            box-shadow: 0 4px 20px rgba(255, 51, 102, 0.15);
+            box-shadow: 0 12px 30px rgba(255, 51, 102, 0.15);
         }
 
-        .cert-badge-row {
+        .card-top {
             display: flex;
             justify-content: space-between;
             align-items: center;
             margin-bottom: 15px;
         }
 
-        .cert-icon {
-            font-size: 1.5rem;
-        }
-
-        .cert-status-tag {
+        .card-status {
             font-family: monospace;
             font-size: 0.75rem;
             font-weight: bold;
-            padding: 3px 8px;
-            border-radius: 4px;
+            padding: 4px 10px;
+            border-radius: 6px;
             text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
 
         .status-active {
@@ -185,53 +240,45 @@
             border: 1px solid var(--neon-blue);
         }
 
-        .cert-name {
-            font-size: 1.2rem;
+        .card-title {
+            font-size: 1.25rem;
             color: #fff;
             font-weight: 700;
-            margin-bottom: 6px;
+            margin-bottom: 8px;
         }
 
-        .cert-issuer {
+        .card-subtitle {
             color: var(--text-muted);
-            font-size: 0.85rem;
+            font-size: 0.88rem;
             margin-bottom: 15px;
         }
 
-        .cert-link {
+        .card-link {
             font-family: monospace;
-            font-size: 0.85rem;
+            font-size: 0.88rem;
             color: var(--neon-blue);
             text-decoration: none;
             display: inline-flex;
             align-items: center;
-            gap: 5px;
+            gap: 6px;
+            font-weight: bold;
             margin-top: auto;
+            transition: color 0.2s ease;
         }
 
-        .cert-link:hover {
+        .card-link:hover {
             color: #fff;
         }
 
-        /* Two Column Content Layout */
+        /* Structural Page Content Layout */
         .main-layout {
             display: grid;
-            grid-template-columns: 2fr 1fr;
+            grid-template-columns: 2.2fr 1fr;
             gap: 30px;
         }
 
-        @media (max-width: 850px) {
+        @media (max-width: 900px) {
             .main-layout { grid-template-columns: 1fr; }
-        }
-
-        h2 {
-            font-size: 1.4rem;
-            margin-bottom: 20px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            border-bottom: 1px solid var(--border-color);
-            padding-bottom: 8px;
         }
 
         .timeline {
@@ -243,8 +290,13 @@
         .timeline-item {
             background: var(--surface-dark);
             border: 1px solid var(--border-color);
-            border-radius: 8px;
-            padding: 24px;
+            border-radius: 12px;
+            padding: 28px;
+            transition: border-color 0.3s ease;
+        }
+
+        .timeline-item:hover {
+            border-color: rgba(255,255,255,0.15);
         }
 
         .item-header {
@@ -252,11 +304,12 @@
             justify-content: space-between;
             align-items: flex-start;
             flex-wrap: wrap;
-            margin-bottom: 12px;
+            margin-bottom: 15px;
+            gap: 10px;
         }
 
         .job-title {
-            font-size: 1.15rem;
+            font-size: 1.2rem;
             color: #fff;
             font-weight: 600;
         }
@@ -270,6 +323,10 @@
         .duration {
             color: var(--text-muted);
             font-size: 0.85rem;
+            background: rgba(255,255,255,0.03);
+            padding: 2px 8px;
+            border-radius: 4px;
+            border: 1px solid rgba(255,255,255,0.05);
         }
 
         .timeline-item ul {
@@ -278,35 +335,35 @@
 
         .timeline-item li {
             color: #cbd5e1;
-            font-size: 0.92rem;
-            margin-bottom: 8px;
+            font-size: 0.95rem;
+            margin-bottom: 10px;
             position: relative;
-            padding-left: 15px;
+            padding-left: 20px;
         }
 
         .timeline-item li::before {
-            content: "▹";
+            content: "▸";
             position: absolute;
             left: 0;
             color: var(--neon-green);
         }
 
-        /* Sidebar Matrix Cards */
+        /* Sidebar Control Center */
         .sidebar {
             display: flex;
             flex-direction: column;
             gap: 30px;
         }
 
-        .card {
+        .sidebar-card {
             background: var(--surface-dark);
             border: 1px solid var(--border-color);
-            border-radius: 8px;
-            padding: 20px;
+            border-radius: 12px;
+            padding: 25px;
         }
 
         .skill-group {
-            margin-bottom: 15px;
+            margin-bottom: 20px;
         }
 
         .skill-group label {
@@ -314,8 +371,9 @@
             font-size: 0.8rem;
             color: var(--text-muted);
             text-transform: uppercase;
-            margin-bottom: 6px;
+            margin-bottom: 8px;
             font-family: monospace;
+            letter-spacing: 0.5px;
         }
 
         .tags {
@@ -325,37 +383,46 @@
         }
 
         .tag {
-            background: #161f2b;
+            background: rgba(31, 47, 69, 0.4);
             border: 1px solid #2d3d52;
             color: #e5e7eb;
-            padding: 4px 10px;
-            border-radius: 4px;
-            font-size: 0.8rem;
+            padding: 5px 12px;
+            border-radius: 6px;
+            font-size: 0.82rem;
             font-family: monospace;
+            transition: all 0.2s ease;
+        }
+
+        .tag:hover {
+            border-color: var(--neon-blue);
+            background: rgba(0, 210, 255, 0.05);
+            color: #fff;
         }
     </style>
 </head>
 <body>
+
+<canvas id="bg-canvas"></canvas>
 
 <div class="container">
     
     <header>
         <div class="profile-title">
             <h1>Harivasan S</h1>
-            <p>> Security Analyst & Penetration Tester</p>
+            <p>> Security Analyst & Offensive Ops Specialist</p>
             <div class="location">📍 Chennai, Tamil Nadu, India</div>
         </div>
     </header>
 
     <div class="console-box">
         <div class="console-header">
-            <span>SECURE SHELL // harivasan_nodes</span>
-            <span>STATUS: ONLINE</span>
+            <span>SECURE SYSTEM INTERFACE // harivasan_kernel</span>
+            <span>NODE STATUS: ACTIVE</span>
         </div>
-        <p style="color: var(--text-muted);">Type interactive commands to audit system experience data:</p>
-        <p style="font-size: 0.85rem; color: var(--neon-blue); margin-top: 4px;">Commands: <span style="color:#fff">about</span>, <span style="color:#fff">skills</span>, <span style="color:#fff">experience</span>, <span style="color:#fff">clear</span></p>
+        <p style="color: var(--text-muted);">Query secure parameters directly via the shell prompt below:</p>
+        <p style="font-size: 0.85rem; color: var(--neon-blue); margin-top: 4px;">Commands: <span style="color:#fff">about</span>, <span style="color:#fff">tools</span>, <span style="color:#fff">matrix</span>, <span style="color:#fff">clear</span></p>
         
-        <div class="console-output" id="output-pane">Welcome operational system analyst. Standing by for interface requests...</div>
+        <div class="console-output" id="output-pane">Standing by for analyst console input session...</div>
         
         <div class="console-input-area">
             <span class="console-prompt">operator@harivasan.io:~#</span>
@@ -363,55 +430,92 @@
         </div>
     </div>
 
-    <div class="cert-section">
-        <h2>🛡️ Verified Security Credentials</h2>
-        <div class="cert-grid">
-            
-            <div class="cert-card red-team">
-                <div class="cert-badge-row">
-                    <span class="cert-icon">🔴</span>
-                    <span class="cert-status-tag status-active">Active+</span>
+    <div style="margin-bottom: 40px;">
+        <h2>🛡️ Verified Identity & Credentials</h2>
+        <div class="grid-3">
+            <div class="interactive-card red-team-edge">
+                <div class="card-top">
+                    <span style="font-size: 1.5rem;">🔴</span>
+                    <span class="card-status status-active">Active+</span>
                 </div>
                 <div>
-                    <div class="cert-name">OffSec Certified Professional+ (OSCP+)</div>
-                    <div class="cert-issuer">Issued by OffSec • Oct 2025</div>
+                    <div class="card-title">OffSec Certified Professional+ (OSCP+)</div>
+                    <div class="card-subtitle">Issued by OffSec • Oct 2025</div>
                 </div>
-                <a href="https://www.linkedin.com/in/harivasan22" target="_blank" class="cert-link">Verify Credential ↗</a>
+                <a href="https://www.linkedin.com/in/harivasan22" target="_blank" class="card-link">Verify Integrity Flag ↗</a>
             </div>
 
-            <div class="cert-card red-team">
-                <div class="cert-badge-row">
-                    <span class="cert-icon">🛡️</span>
-                    <span class="cert-status-tag status-verified">Verified</span>
+            <div class="interactive-card red-team-edge">
+                <div class="card-top">
+                    <span style="font-size: 1.5rem;">🛡️</span>
+                    <span class="card-status status-verified">Verified</span>
                 </div>
                 <div>
-                    <div class="cert-name">OffSec Certified Professional (OSCP)</div>
-                    <div class="cert-issuer">Issued by OffSec • Oct 2025</div>
+                    <div class="card-title">OffSec Certified Professional (OSCP)</div>
+                    <div class="card-subtitle">Issued by OffSec • Oct 2025</div>
                 </div>
-                <a href="https://www.linkedin.com/in/harivasan22" target="_blank" class="cert-link">Verify Credential ↗</a>
+                <a href="https://www.linkedin.com/in/harivasan22" target="_blank" class="card-link">Verify Integrity Flag ↗</a>
             </div>
 
-            <div class="cert-card">
-                <div class="cert-badge-row">
-                    <span class="cert-icon">🔍</span>
-                    <span class="cert-status-tag status-verified">Completed</span>
+            <div class="interactive-card">
+                <div class="card-top">
+                    <span style="font-size: 1.5rem;">🔍</span>
+                    <span class="card-status status-verified">Completed</span>
                 </div>
                 <div>
-                    <div class="cert-name">SQLite Forensics Certification</div>
-                    <div class="cert-issuer">Issued by Belkasoft</div>
+                    <div class="card-title">SQLite Forensics Module</div>
+                    <div class="card-subtitle">Issued by Belkasoft</div>
                 </div>
-                <a href="https://www.linkedin.com/in/harivasan22" target="_blank" class="cert-link">View Certificate ↗</a>
+                <a href="https://www.linkedin.com/in/harivasan22" target="_blank" class="card-link">Audit Attestation ↗</a>
+            </div>
+        </div>
+    </div>
+
+    <div style="margin-bottom: 40px;">
+        <h2>📁 Engineering & Research Repository Vault</h2>
+        <div class="grid-3">
+            <div class="interactive-card">
+                <div class="card-top">
+                    <span style="font-size: 1.3rem; color: var(--neon-blue);">⚙️</span>
+                    <span style="font-family: monospace; font-size: 0.8rem; color: var(--text-muted);">Automation Engine</span>
+                </div>
+                <div>
+                    <div class="card-title">Orchestrated Recon Engine</div>
+                    <div class="card-subtitle">Custom asynchronous mapping framework built in Python to run continuous asset discovery, discovery validation, and shadow service maps.</div>
+                </div>
+                <a href="#" class="card-link">Initialize Source Code ↗</a>
             </div>
 
+            <div class="interactive-card">
+                <div class="card-top">
+                    <span style="font-size: 1.3rem; color: var(--neon-red);">📱</span>
+                    <span style="font-family: monospace; font-size: 0.8rem; color: var(--text-muted);">Mobile Platform</span>
+                </div>
+                <div>
+                    <div class="card-title">iOS/Android Runtime Interceptor</div>
+                    <div class="card-subtitle">Research playbooks detailing custom Frida script pipelines to bypass runtime certificate pinning, jailbreak detection, and root enforcement validation.</div>
+                </div>
+                <a href="#" class="card-link">Review Technical Playbook ↗</a>
+            </div>
+
+            <div class="interactive-card">
+                <div class="card-top">
+                    <span style="font-size: 1.3rem; color: var(--neon-green);">🏢</span>
+                    <span style="font-family: monospace; font-size: 0.8rem; color: var(--text-muted);">Red Team Lab</span>
+                </div>
+                <div>
+                    <div class="card-title">Active Directory Lab Simulations</div>
+                    <div class="card-subtitle">Automated Hyper-V deployment matrices tracing simulated kerberoasting vectors, constrained delegation vulnerabilities, and persistence tracking templates.</div>
+                </div>
+                <a href="#" class="card-link">Inspect Architecture Map ↗</a>
+            </div>
         </div>
     </div>
 
     <div class="main-layout">
-        
         <div class="timeline-container">
-            <h2>💼 Professional Track</h2>
+            <h2>💼 Operational Security Experience Tracker</h2>
             <div class="timeline">
-                
                 <div class="timeline-item">
                     <div class="item-header">
                         <div>
@@ -421,8 +525,8 @@
                         <div class="duration">Mar 2025 - Present</div>
                     </div>
                     <ul>
-                        <li>Execution of corporate defensive validation strategies and operational safety consulting.</li>
-                        <li>Platform assessment focusing on high-impact cloud architectures, mobile deployments (iOS/Android), and internal infrastructures.</li>
+                        <li>Execution of corporate defensive validation strategies and adversarial simulation assessment pipelines.</li>
+                        <li>Broad surface coverage testing tracking critical infrastructure components, complex web APIs, and mobile runtime frameworks.</li>
                     </ul>
                 </div>
 
@@ -435,52 +539,45 @@
                         <div class="duration">Apr 2023 - Mar 2025</div>
                     </div>
                     <ul>
-                        <li>Conducted Vulnerability Assessment and Penetration Testing (VAPT) across enterprise networks, web apps, and cloud infrastructures.</li>
-                        <li>Led and supported Red Team simulations evaluating complex network resilience defenses against active threat-actor tactics.</li>
-                        <li>Developed and integrated customized automation frameworks to streamline security tracking operations.</li>
-                        <li>Performed continuous dark web surveillance modules targeting potential leaks, corporate credential compromises, and brand exposures.</li>
+                        <li>Executed full matrix Vulnerability Assessment and Penetration Testing (VAPT) loops targeting enterprise clouds and distributed endpoints.</li>
+                        <li>Designed automated processing frameworks reducing reporting intervals and asset tracking latency across network parameters.</li>
+                        <li>Maintained open-source dark web observation configurations verifying information containment parameters against data theft dumps.</li>
                     </ul>
                 </div>
-                
             </div>
         </div>
 
         <div class="sidebar">
-            
-            <div class="card">
-                <h2>🛠️ Matrix Focus</h2>
-                
+            <div class="sidebar-card">
+                <h2>🛠️ Operational Capability Grid</h2>
                 <div class="skill-group">
-                    <label>Offensive Ops</label>
+                    <label>Adversarial Strategy</label>
                     <div class="tags">
                         <span class="tag">Red Teaming</span>
-                        <span class="tag">VAPT</span>
-                        <span class="tag">Bug Bounty</span>
-                        <span class="tag">Exploit Dev</span>
+                        <span class="tag">VAPT Matrix</span>
+                        <span class="tag">Exploit Design</span>
                     </div>
                 </div>
-
                 <div class="skill-group">
-                    <label>Environments</label>
+                    <label>Target Layers</label>
                     <div class="tags">
-                        <span class="tag">Infrastructure</span>
-                        <span class="tag">Web Apps</span>
-                        <span class="tag">iOS & Android</span>
+                        <span class="tag">Cloud Infrastructure</span>
+                        <span class="tag">Web & APIs</span>
+                        <span class="tag">Mobile (iOS/Android)</span>
                         <span class="tag">Thick Clients</span>
                     </div>
                 </div>
-
                 <div class="skill-group">
-                    <label>Automation & OS</label>
+                    <label>Tooling Modules</label>
                     <div class="tags">
-                        <span class="tag">Python</span>
-                        <span class="tag">Bash</span>
-                        <span class="tag">Linux (Kali)</span>
+                        <span class="tag">Python Core</span>
+                        <span class="tag">Bash Logic</span>
+                        <span class="tag">Kali Linux</span>
                     </div>
                 </div>
             </div>
 
-            <div class="card">
+            <div class="sidebar-card">
                 <h2>🎓 Academic Track</h2>
                 <p style="font-size:0.95rem; font-weight:600; color:#fff;">MSc Information Security & Digital Forensics</p>
                 <p style="font-size:0.85rem; color:var(--text-muted); margin-bottom:12px;">Karunya Institute of Technology</p>
@@ -488,13 +585,12 @@
                 <p style="font-size:0.95rem; font-weight:600; color:#fff;">BSc Physics</p>
                 <p style="font-size:0.85rem; color:var(--text-muted);">Loyola College</p>
             </div>
-
         </div>
-
     </div>
 </div>
 
 <script>
+    // System Shell Parser Logic Engine
     function processCommand(e) {
         if (e.key === 'Enter') {
             const input = document.getElementById('cli-input');
@@ -502,20 +598,75 @@
             const query = input.value.trim().toLowerCase();
 
             if (query === 'about') {
-                output.innerText = "I’m a passionate cybersecurity analyst with deep hands-on expertise in offensive security. My tactics focus on real-world Red Team simulations, asset exploitation proofs, multi-platform VAPT frameworks (Web, Infrastructure, Mobile/Thick Clients), and open-source automated logic design.";
-            } else if (query === 'skills') {
-                output.innerText = "[✓] Red Team Operations\n[✓] Automated Scanning Engine Design\n[✓] Mobile Architecture Assessments (iOS/Android)\n[✓] Dark Web Surveillance Strategy & Threat Hunting";
-            } else if (query === 'experience') {
-                output.innerText = "[+] StrongBox IT (2025-Present): Security Analyst focusing on cross-platform offensive defense.\n[+] Divsight Intelligence (2023-2025): Led corporate VAPT matrix pipelines and automation tasks.";
+                output.innerText = "Active Security Analyst certified in OSCP and OSCP+. Specializing in sophisticated red team simulations, multi-platform runtime evaluations, and open-source intelligence automation systems designed to target complex digital architectures.";
+            } else if (query === 'tools') {
+                output.innerText = "Core Tooling Modules:\n- Offensive Platforms: Burp Suite Pro, Metasploit, Nmap Engine\n- Runtime Inversion: Frida Framework, Objection Instrumentation\n- Automation Core: Python AsyncIO Engine, Custom Bash Script Automation Pack";
+            } else if (query === 'matrix') {
+                // Interactive trigger to speed up animation temporarily
+                output.innerText = "[!] Running core matrix diagnostics logic. Modifying display array properties...";
+                matrixSpeedUp();
             } else if (query === 'clear') {
-                output.innerText = "Console buffer cleared.";
+                output.innerText = "Console screen buffer initialized successfully.";
             } else if (query === '') {
                 output.innerText = "";
             } else {
-                output.innerText = `Error: Interface instruction '${query}' unknown. Try: 'about', 'skills', or 'experience'`;
+                output.innerText = `Error code 0x44: Command token '${query}' unrecognized. Active variables: 'about', 'tools', 'matrix', 'clear'`;
             }
             input.value = '';
         }
+    }
+
+    // High Performance Matrix Background Display Handler
+    const canvas = document.getElementById('bg-canvas');
+    const ctx = canvas.getContext('2d');
+
+    let resizeTimer;
+    function initializeCanvas() {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+    }
+    initializeCanvas();
+
+    window.addEventListener('resize', () => {
+        clearTimeout(resizeTimer);
+        resizeTimer = setTimeout(initializeCanvas, 200);
+    });
+
+    const characters = "01010101ABCDEFGHIJKLMNOPQRSTUVWXYZ🧬💻☣️🔐";
+    const charArray = characters.split('');
+    const fontSize = 14;
+    let columns = canvas.width / fontSize;
+    let drops = Array(Math.floor(columns)).fill(1);
+
+    let speedModifier = 1;
+    function renderMatrix() {
+        ctx.fillStyle = 'rgba(5, 7, 10, 0.05)';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+        ctx.fillStyle = '#00ff66';
+        ctx.font = fontSize + 'px monospace';
+
+        columns = canvas.width / fontSize;
+        if (drops.length < columns) {
+            drops = drops.concat(Array(Math.floor(columns) - drops.length).fill(1));
+        }
+
+        for (let i = 0; i < drops.length; i++) {
+            const text = charArray[Math.floor(Math.random() * charArray.length)];
+            ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+
+            if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+                drops[i] = 0;
+            }
+            drops[i] += speedModifier;
+        }
+    }
+
+    let matrixInterval = setInterval(renderMatrix, 33);
+
+    function matrixSpeedUp() {
+        speedModifier = 3;
+        setTimeout(() => { speedModifier = 1; }, 5000);
     }
 </script>
 
