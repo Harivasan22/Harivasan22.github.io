@@ -3,160 +3,419 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Harivasan // Cybersecurity Portfolio</title>
+    <title>Harivasan S // Senior Offensive Security Portfolio</title>
     <style>
         :root {
-            --bg-color: #0d1117;
-            --terminal-bg: #161b22;
-            --accent-color: #00ff66;
-            --text-color: #c9d1d9;
-            --dim-text: #8b949e;
+            --bg-dark: #080c10;
+            --surface-dark: #0d131a;
+            --border-color: #1f2937;
+            --neon-green: #00ff66;
+            --neon-blue: #00d2ff;
+            --neon-red: #ff3366;
+            --text-main: #f3f4f6;
+            --text-muted: #9ca3af;
         }
-        body {
-            background-color: var(--bg-color);
-            color: var(--text-color);
-            font-family: 'Courier New', Courier, monospace;
+
+        * {
+            box-sizing: border-box;
             margin: 0;
-            padding: 20px;
-            display: flex;
-            justify-content: center;
+            padding: 0;
         }
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            padding: 40px 20px;
+            line-height: 1.6;
+        }
+
         .container {
-            width: 100%;
-            max-width: 900px;
+            max-width: 1050px;
+            margin: 0 auto;
         }
+
+        /* Top Header Grid */
         header {
-            border-bottom: 2px dashed var(--accent-color);
-            padding-bottom: 20px;
+            background: var(--surface-dark);
+            border: 1px solid var(--border-color);
+            border-top: 4px solid var(--neon-blue);
+            border-radius: 8px;
+            padding: 30px;
             margin-bottom: 30px;
-        }
-        h1 { color: var(--accent-color); margin: 0; font-size: 2rem; }
-        .badge {
-            background-color: #ff3333;
-            color: white;
-            padding: 4px 8px;
-            font-weight: bold;
-            border-radius: 4px;
-            font-size: 0.85rem;
-            display: inline-block;
-            margin-top: 10px;
-            box-shadow: 0 0 10px rgba(255, 51, 51, 0.4);
-        }
-        .terminal {
-            background-color: var(--terminal-bg);
-            border: 1px solid #30363d;
-            border-radius: 6px;
-            padding: 20px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-            margin-bottom: 30px;
-        }
-        .terminal-header {
-            color: var(--dim-text);
-            margin-bottom: 15px;
-            font-size: 0.9rem;
-            border-bottom: 1px solid #30363d;
-            padding-bottom: 5px;
-        }
-        .grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
             gap: 20px;
         }
-        .card {
-            background: #21262d;
-            border: 1px solid #30363d;
-            padding: 15px;
-            border-radius: 6px;
+
+        .profile-title h1 {
+            font-size: 2.2rem;
+            letter-spacing: -0.5px;
+            color: #fff;
         }
-        .card h3 { color: var(--accent-color); margin-top: 0; }
-        a { color: var(--accent-color); text-decoration: none; }
-        a:hover { text-decoration: underline; }
-        
-        /* Interactive Section */
-        .interactive-box {
-            background: #000;
-            padding: 15px;
-            border-left: 3px solid var(--accent-color);
-            margin-top: 20px;
+
+        .profile-title p {
+            color: var(--neon-blue);
+            font-family: monospace;
+            font-size: 1rem;
+            margin-top: 5px;
         }
-        .input-line {
+
+        .location {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            margin-top: 4px;
+        }
+
+        .badge-container {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .badge {
+            font-family: monospace;
+            font-weight: bold;
+            padding: 6px 14px;
+            border-radius: 4px;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+        }
+
+        .badge.oscp {
+            background: rgba(255, 51, 102, 0.15);
+            color: var(--neon-red);
+            border: 1px solid var(--neon-red);
+        }
+
+        .badge.oscp-plus {
+            background: rgba(0, 255, 102, 0.15);
+            color: var(--neon-green);
+            border: 1px solid var(--neon-green);
+            animation: pulse 2s infinite ease-in-out;
+        }
+
+        /* Interactive Modern Console Area */
+        .console-box {
+            background: #04070a;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 20px;
+            font-family: monospace;
+            margin-bottom: 40px;
+        }
+
+        .console-header {
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            margin-bottom: 12px;
+            display: flex;
+            justify-content: space-between;
+            border-bottom: 1px solid #141b24;
+            padding-bottom: 8px;
+        }
+
+        .console-input-area {
             display: flex;
             align-items: center;
+            margin-top: 10px;
         }
-        .prompt { color: var(--accent-color); margin-right: 10px; }
-        input {
+
+        .console-prompt {
+            color: var(--neon-green);
+            margin-right: 10px;
+        }
+
+        .console-input {
             background: transparent;
             border: none;
             color: #fff;
+            outline: none;
             font-family: inherit;
             font-size: 1rem;
             width: 100%;
-            outline: none;
         }
-        #output {
-            margin-top: 10px;
-            color: #00ff66;
-            white-space: pre-line;
+
+        .console-output {
+            margin-top: 12px;
+            color: #d1d5db;
+            white-space: pre-wrap;
+            font-size: 0.95rem;
+        }
+
+        /* Two Column Content Layout */
+        .main-layout {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 30px;
+        }
+
+        @media (max-width: 850px) {
+            .main-layout { grid-template-columns: 1fr; }
+        }
+
+        h2 {
+            font-size: 1.4rem;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 8px;
+        }
+
+        .timeline {
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+        }
+
+        .timeline-item {
+            background: var(--surface-dark);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 24px;
+            position: relative;
+        }
+
+        .item-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            flex-wrap: wrap;
+            margin-bottom: 12px;
+        }
+
+        .job-title {
+            font-size: 1.15rem;
+            color: #fff;
+            font-weight: 600;
+        }
+
+        .company {
+            color: var(--neon-blue);
+            font-size: 0.95rem;
+            font-family: monospace;
+        }
+
+        .duration {
+            color: var(--text-muted);
+            font-size: 0.85rem;
+        }
+
+        .timeline-item ul {
+            list-style-type: none;
+        }
+
+        .timeline-item li {
+            color: #cbd5e1;
+            font-size: 0.92rem;
+            margin-bottom: 8px;
+            position: relative;
+            padding-left: 15px;
+        }
+
+        .timeline-item li::before {
+            content: "▹";
+            position: absolute;
+            left: 0;
+            color: var(--neon-green);
+        }
+
+        /* Sidebar Matrix Cards */
+        .sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+        }
+
+        .card {
+            background: var(--surface-dark);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 20px;
+        }
+
+        .skill-group {
+            margin-bottom: 15px;
+        }
+
+        .skill-group label {
+            display: block;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            margin-bottom: 6px;
+            font-family: monospace;
+        }
+
+        .tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .tag {
+            background: #161f2b;
+            border: 1px solid #2d3d52;
+            color: #e5e7eb;
+            padding: 4px 10px;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            font-family: monospace;
+        }
+
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(0, 255, 102, 0.4); }
+            70% { box-shadow: 0 0 0 8px rgba(0, 255, 102, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(0, 255, 102, 0); }
         }
     </style>
 </head>
 <body>
 
 <div class="container">
+    
     <header>
-        <h1>HARIVASAN // PENETRATION TESTER</h1>
-        <div class="badge">🔴 OSCP CERTIFIED</div>
-        <p style="color: var(--dim-text);">Specializing in Offensive Security, Infrastructure Hacking, and Vulnerability Research.</p>
+        <div class="profile-title">
+            <h1>Harivasan S</h1>
+            <p>> Security Analyst & Penetration Tester</p>
+            <div class="location">📍 Chennai, Tamil Nadu, India</div>
+        </div>
+        <div class="badge-container">
+            <div class="badge oscp">OSCP Certified</div>
+            <div class="badge oscp-plus">OSCP+ Active</div>
+        </div>
     </header>
 
-    <div class="terminal">
-        <div class="terminal-header">harivasan@sec-ops:~# interactive_console.sh</div>
-        <p>Welcome to my secure node. Type a command below to interact with the portfolio.</p>
-        <p style="color: var(--dim-text); font-size: 0.85rem;">Try typing: <strong>help</strong>, <strong>about</strong>, or <strong>root</strong></p>
+    <div class="console-box">
+        <div class="console-header">
+            <span>SECURE SHELL // harivasan_nodes</span>
+            <span>STATUS: ONLINE</span>
+        </div>
+        <p style="color: var(--text-muted);">Type interactive commands to audit system experience data:</p>
+        <p style="font-size: 0.85rem; color: var(--neon-blue); margin-top: 4px;">Commands: <span style="color:#fff">about</span>, <span style="color:#fff">skills</span>, <span style="color:#fff">certifications</span>, <span style="color:#fff">clear</span></p>
         
-        <div class="interactive-box">
-            <div class="input-line">
-                <span class="prompt">guest@harivasan_sec:$</span>
-                <input type="text" id="cmd-input" autofocus placeholder="type here..." onkeydown="handleCommand(event)">
-            </div>
-            <div id="output"></div>
+        <div class="console-output" id="output-pane">Welcome operational system analyst. Standing by for interface requests...</div>
+        
+        <div class="console-input-area">
+            <span class="console-prompt">operator@harivasan.io:~#</span>
+            <input type="text" class="console-input" id="cli-input" autofocus onkeydown="processCommand(event)">
         </div>
     </div>
 
-    <h2>📂 Featured Repositories & Write-ups</h2>
-    <div class="grid">
-        <div class="card">
-            <h3>Active Directory Lab</h3>
-            <p>Deployment scripts and attack methodology documentation for hacking enterprise AD environments.</p>
-            <a href="#">View Repository →</a>
+    <div class="main-layout">
+        
+        <div class="timeline-container">
+            <h2>💼 Professional Track</h2>
+            <div class="timeline">
+                
+                <div class="timeline-item">
+                    <div class="item-header">
+                        <div>
+                            <div class="job-title">Security Analyst</div>
+                            <div class="company">StrongBox IT - Cybersecurity Consulting</div>
+                        </div>
+                        <div class="duration">Mar 2025 - Present</div>
+                    </div>
+                    <ul>
+                        <li>Execution of corporate defensive validation strategies and operational safety consulting.</li>
+                        <li>Platform assessment focusing on high-impact cloud architectures, mobile deployments, and internal networks.</li>
+                    </ul>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="item-header">
+                        <div>
+                            <div class="job-title">Cyber Security Analyst</div>
+                            <div class="company">Divsight Intelligence Pvt. Ltd.</div>
+                        </div>
+                        <div class="duration">Apr 2023 - Mar 2025 (2 years)</div>
+                    </div>
+                    <ul>
+                        <li>Conducted Vulnerability Assessment and Penetration Testing (VAPT) across enterprise networks, web apps, and cloud infrastructures.</li>
+                        <li>Led and supported Red Team simulations evaluating complex network resilience defenses against active threat-actor tactics.</li>
+                        <li>Developed and integrated customized automation frameworks to streamline repetitive security tracking operations.</li>
+                        <li>Performed continuous dark web surveillance modules targeting potential leaks, corporate credential compromises, and brand exposures.</li>
+                        <li>Designed and deployed active phishing simulations and target social engineering assessment runs.</li>
+                    </ul>
+                </div>
+                
+            </div>
         </div>
-        <div class="card">
-            <h3>Buffer Overflow Exploit</h3>
-            <p>Custom Python exploit targeting an OSCP-like vulnerable Windows executable program.</p>
-            <a href="#">View Code →</a>
+
+        <div class="sidebar">
+            
+            <div class="card">
+                <h2>🛠️ Matrix Focus</h2>
+                
+                <div class="skill-group">
+                    <label>Offensive Ops</label>
+                    <div class="tags">
+                        <span class="tag">Red Teaming</span>
+                        <span class="tag">VAPT</span>
+                        <span class="tag">Bug Bounty</span>
+                        <span class="tag">Exploit Dev</span>
+                    </div>
+                </div>
+
+                <div class="skill-group">
+                    <label>Environments</label>
+                    <div class="tags">
+                        <span class="tag">Infrastructure</span>
+                        <span class="tag">Web Apps</span>
+                        <span class="tag">iOS & Android</span>
+                        <span class="tag">Thick Clients</span>
+                    </div>
+                </div>
+
+                <div class="skill-group">
+                    <label>Automation & OS</label>
+                    <div class="tags">
+                        <span class="tag">Python</span>
+                        <span class="tag">Bash</span>
+                        <span class="tag">Linux (Kali)</span>
+                        <span class="tag">Darkweb OSINT</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h2>🎓 Academic Track</h2>
+                <p style="font-size:0.95rem; font-weight:600; color:#fff;">MSc Information Security & Digital Forensics</p>
+                <p style="font-size:0.85rem; color:var(--text-muted); margin-bottom:12px;">Karunya Institute of Technology</p>
+                
+                <p style="font-size:0.95rem; font-weight:600; color:#fff;">BSc Physics</p>
+                <p style="font-size:0.85rem; color:var(--text-muted);">Loyola College</p>
+            </div>
+
         </div>
+
     </div>
 </div>
 
 <script>
-    function handleCommand(event) {
-        if (event.key === 'Enter') {
-            const input = document.getElementById('cmd-input');
-            const output = document.getElementById('output');
-            const cmd = input.value.trim().toLowerCase();
-            
-            if (cmd === 'help') {
-                output.innerText = "Available commands:\n- about : Show background information\n- root  : Attempt system exploit\n- clear : Clear the terminal screen";
-            } else if (cmd === 'about') {
-                output.innerText = "[+] Certification: Offensive Security Certified Professional (OSCP)\n[+] Primary Focus: Penetration Testing / Red Teaming\n[+] Frameworks: MITRE ATT&CK, PTES";
-            } else if (cmd === 'root') {
-                output.innerText = "Running exploit payload...\n[!] Bypassing AV...\n[+] SUCCESS: Root access granted! Welcome back, Harivasan.";
-            } else if (cmd === 'clear') {
-                output.innerText = "";
-            } else if (cmd === '') {
+    function processCommand(e) {
+        if (e.key === 'Enter') {
+            const input = document.getElementById('cli-input');
+            const output = document.getElementById('output-pane');
+            const query = input.value.trim().toLowerCase();
+
+            if (query === 'about') {
+                output.innerText = "I’m a passionate cybersecurity analyst with deep hands-on expertise in offensive security. My tactics focus on real-world Red Team simulations, asset exploitation proofs, multi-platform VAPT frameworks (Web, Infrastructure, Mobile/Thick Clients), and open-source automated logic design.";
+            } else if (query === 'skills') {
+                output.innerText = "[✓] Red Team Operations\n[✓] Automated Scanning Engine Design\n[✓] Mobile Architecture Assessments (iOS/Android)\n[✓] Dark Web Surveillance Strategy & Threat Hunting";
+            } else if (query === 'certifications') {
+                output.innerText = "• Offensive Security Certified Professional (OSCP) | ID: 163061709\n• Offensive Security Certified Professional+ (OSCP+) | ID: 163061481\n• SQLite Forensics Certification via Belkasoft";
+            } else if (query === 'clear') {
+                output.innerText = "Console buffer cleared.";
+            } else if (query === '') {
                 output.innerText = "";
             } else {
-                output.innerText = `Command not found: ${cmd}. Type 'help' for instructions.`;
+                output.innerText = `Error: Interface instruction '${query}' unknown. Try: 'about', 'skills', or 'certifications'`;
             }
             input.value = '';
         }
