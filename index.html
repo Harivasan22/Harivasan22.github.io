@@ -69,35 +69,6 @@
             margin-top: 4px;
         }
 
-        .badge-container {
-            display: flex;
-            gap: 12px;
-            flex-wrap: wrap;
-        }
-
-        .badge {
-            font-family: monospace;
-            font-weight: bold;
-            padding: 6px 14px;
-            border-radius: 4px;
-            font-size: 0.85rem;
-            text-transform: uppercase;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-        }
-
-        .badge.oscp {
-            background: rgba(255, 51, 102, 0.15);
-            color: var(--neon-red);
-            border: 1px solid var(--neon-red);
-        }
-
-        .badge.oscp-plus {
-            background: rgba(0, 255, 102, 0.15);
-            color: var(--neon-green);
-            border: 1px solid var(--neon-green);
-            animation: pulse 2s infinite ease-in-out;
-        }
-
         /* Interactive Modern Console Area */
         .console-box {
             background: #04070a;
@@ -146,6 +117,102 @@
             font-size: 0.95rem;
         }
 
+        /* Interactive Visual Certifications Grid */
+        .cert-section {
+            margin-bottom: 40px;
+        }
+
+        .cert-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 15px;
+        }
+
+        .cert-card {
+            background: var(--surface-dark);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cert-card:hover {
+            transform: translateY(-3px);
+            border-color: var(--neon-blue);
+            box-shadow: 0 4px 20px rgba(0, 210, 255, 0.15);
+        }
+
+        .cert-card.red-team:hover {
+            border-color: var(--neon-red);
+            box-shadow: 0 4px 20px rgba(255, 51, 102, 0.15);
+        }
+
+        .cert-badge-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .cert-icon {
+            font-size: 1.5rem;
+        }
+
+        .cert-status-tag {
+            font-family: monospace;
+            font-size: 0.75rem;
+            font-weight: bold;
+            padding: 3px 8px;
+            border-radius: 4px;
+            text-transform: uppercase;
+        }
+
+        .status-active {
+            background: rgba(0, 255, 102, 0.1);
+            color: var(--neon-green);
+            border: 1px solid var(--neon-green);
+        }
+
+        .status-verified {
+            background: rgba(0, 210, 255, 0.1);
+            color: var(--neon-blue);
+            border: 1px solid var(--neon-blue);
+        }
+
+        .cert-name {
+            font-size: 1.2rem;
+            color: #fff;
+            font-weight: 700;
+            margin-bottom: 6px;
+        }
+
+        .cert-issuer {
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            margin-bottom: 15px;
+        }
+
+        .cert-link {
+            font-family: monospace;
+            font-size: 0.85rem;
+            color: var(--neon-blue);
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            margin-top: auto;
+        }
+
+        .cert-link:hover {
+            color: #fff;
+        }
+
         /* Two Column Content Layout */
         .main-layout {
             display: grid;
@@ -178,7 +245,6 @@
             border: 1px solid var(--border-color);
             border-radius: 8px;
             padding: 24px;
-            position: relative;
         }
 
         .item-header {
@@ -267,12 +333,6 @@
             font-size: 0.8rem;
             font-family: monospace;
         }
-
-        @keyframes pulse {
-            0% { box-shadow: 0 0 0 0 rgba(0, 255, 102, 0.4); }
-            70% { box-shadow: 0 0 0 8px rgba(0, 255, 102, 0); }
-            100% { box-shadow: 0 0 0 0 rgba(0, 255, 102, 0); }
-        }
     </style>
 </head>
 <body>
@@ -285,10 +345,6 @@
             <p>> Security Analyst & Penetration Tester</p>
             <div class="location">📍 Chennai, Tamil Nadu, India</div>
         </div>
-        <div class="badge-container">
-            <div class="badge oscp">OSCP Certified</div>
-            <div class="badge oscp-plus">OSCP+ Active</div>
-        </div>
     </header>
 
     <div class="console-box">
@@ -297,13 +353,56 @@
             <span>STATUS: ONLINE</span>
         </div>
         <p style="color: var(--text-muted);">Type interactive commands to audit system experience data:</p>
-        <p style="font-size: 0.85rem; color: var(--neon-blue); margin-top: 4px;">Commands: <span style="color:#fff">about</span>, <span style="color:#fff">skills</span>, <span style="color:#fff">certifications</span>, <span style="color:#fff">clear</span></p>
+        <p style="font-size: 0.85rem; color: var(--neon-blue); margin-top: 4px;">Commands: <span style="color:#fff">about</span>, <span style="color:#fff">skills</span>, <span style="color:#fff">experience</span>, <span style="color:#fff">clear</span></p>
         
         <div class="console-output" id="output-pane">Welcome operational system analyst. Standing by for interface requests...</div>
         
         <div class="console-input-area">
             <span class="console-prompt">operator@harivasan.io:~#</span>
             <input type="text" class="console-input" id="cli-input" autofocus onkeydown="processCommand(event)">
+        </div>
+    </div>
+
+    <div class="cert-section">
+        <h2>🛡️ Verified Security Credentials</h2>
+        <div class="cert-grid">
+            
+            <div class="cert-card red-team">
+                <div class="cert-badge-row">
+                    <span class="cert-icon">🔴</span>
+                    <span class="cert-status-tag status-active">Active+</span>
+                </div>
+                <div>
+                    <div class="cert-name">OffSec Certified Professional+ (OSCP+)</div>
+                    <div class="cert-issuer">Issued by OffSec • Oct 2025</div>
+                </div>
+                <a href="https://www.linkedin.com/in/harivasan22" target="_blank" class="cert-link">Verify Credential ↗</a>
+            </div>
+
+            <div class="cert-card red-team">
+                <div class="cert-badge-row">
+                    <span class="cert-icon">🛡️</span>
+                    <span class="cert-status-tag status-verified">Verified</span>
+                </div>
+                <div>
+                    <div class="cert-name">OffSec Certified Professional (OSCP)</div>
+                    <div class="cert-issuer">Issued by OffSec • Oct 2025</div>
+                </div>
+                <a href="https://www.linkedin.com/in/harivasan22" target="_blank" class="cert-link">Verify Credential ↗</a>
+            </div>
+
+            <div class="cert-card">
+                <div class="cert-badge-row">
+                    <span class="cert-icon">🔍</span>
+                    <span class="cert-status-tag status-verified">Completed</span>
+                </div>
+                <div>
+                    <div class="cert-name">SQLite Forensics Certification</div>
+                    <div class="cert-issuer">Issued by Belkasoft</div>
+                </div>
+                <a href="https://www.linkedin.com/in/harivasan22" target="_blank" class="cert-link">View Certificate ↗</a>
+            </div>
+
         </div>
     </div>
 
@@ -323,7 +422,7 @@
                     </div>
                     <ul>
                         <li>Execution of corporate defensive validation strategies and operational safety consulting.</li>
-                        <li>Platform assessment focusing on high-impact cloud architectures, mobile deployments, and internal networks.</li>
+                        <li>Platform assessment focusing on high-impact cloud architectures, mobile deployments (iOS/Android), and internal infrastructures.</li>
                     </ul>
                 </div>
 
@@ -333,14 +432,13 @@
                             <div class="job-title">Cyber Security Analyst</div>
                             <div class="company">Divsight Intelligence Pvt. Ltd.</div>
                         </div>
-                        <div class="duration">Apr 2023 - Mar 2025 (2 years)</div>
+                        <div class="duration">Apr 2023 - Mar 2025</div>
                     </div>
                     <ul>
                         <li>Conducted Vulnerability Assessment and Penetration Testing (VAPT) across enterprise networks, web apps, and cloud infrastructures.</li>
                         <li>Led and supported Red Team simulations evaluating complex network resilience defenses against active threat-actor tactics.</li>
-                        <li>Developed and integrated customized automation frameworks to streamline repetitive security tracking operations.</li>
+                        <li>Developed and integrated customized automation frameworks to streamline security tracking operations.</li>
                         <li>Performed continuous dark web surveillance modules targeting potential leaks, corporate credential compromises, and brand exposures.</li>
-                        <li>Designed and deployed active phishing simulations and target social engineering assessment runs.</li>
                     </ul>
                 </div>
                 
@@ -378,7 +476,6 @@
                         <span class="tag">Python</span>
                         <span class="tag">Bash</span>
                         <span class="tag">Linux (Kali)</span>
-                        <span class="tag">Darkweb OSINT</span>
                     </div>
                 </div>
             </div>
@@ -408,14 +505,14 @@
                 output.innerText = "I’m a passionate cybersecurity analyst with deep hands-on expertise in offensive security. My tactics focus on real-world Red Team simulations, asset exploitation proofs, multi-platform VAPT frameworks (Web, Infrastructure, Mobile/Thick Clients), and open-source automated logic design.";
             } else if (query === 'skills') {
                 output.innerText = "[✓] Red Team Operations\n[✓] Automated Scanning Engine Design\n[✓] Mobile Architecture Assessments (iOS/Android)\n[✓] Dark Web Surveillance Strategy & Threat Hunting";
-            } else if (query === 'certifications') {
-                output.innerText = "• Offensive Security Certified Professional (OSCP) | ID: 163061709\n• Offensive Security Certified Professional+ (OSCP+) | ID: 163061481\n• SQLite Forensics Certification via Belkasoft";
+            } else if (query === 'experience') {
+                output.innerText = "[+] StrongBox IT (2025-Present): Security Analyst focusing on cross-platform offensive defense.\n[+] Divsight Intelligence (2023-2025): Led corporate VAPT matrix pipelines and automation tasks.";
             } else if (query === 'clear') {
                 output.innerText = "Console buffer cleared.";
             } else if (query === '') {
                 output.innerText = "";
             } else {
-                output.innerText = `Error: Interface instruction '${query}' unknown. Try: 'about', 'skills', or 'certifications'`;
+                output.innerText = `Error: Interface instruction '${query}' unknown. Try: 'about', 'skills', or 'experience'`;
             }
             input.value = '';
         }
