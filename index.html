@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Harivasan // Cybersecurity Portfolio</title>
+    <style>
+        :root {
+            --bg-color: #0d1117;
+            --terminal-bg: #161b22;
+            --accent-color: #00ff66;
+            --text-color: #c9d1d9;
+            --dim-text: #8b949e;
+        }
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            font-family: 'Courier New', Courier, monospace;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+        }
+        .container {
+            width: 100%;
+            max-width: 900px;
+        }
+        header {
+            border-bottom: 2px dashed var(--accent-color);
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        h1 { color: var(--accent-color); margin: 0; font-size: 2rem; }
+        .badge {
+            background-color: #ff3333;
+            color: white;
+            padding: 4px 8px;
+            font-weight: bold;
+            border-radius: 4px;
+            font-size: 0.85rem;
+            display: inline-block;
+            margin-top: 10px;
+            box-shadow: 0 0 10px rgba(255, 51, 51, 0.4);
+        }
+        .terminal {
+            background-color: var(--terminal-bg);
+            border: 1px solid #30363d;
+            border-radius: 6px;
+            padding: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            margin-bottom: 30px;
+        }
+        .terminal-header {
+            color: var(--dim-text);
+            margin-bottom: 15px;
+            font-size: 0.9rem;
+            border-bottom: 1px solid #30363d;
+            padding-bottom: 5px;
+        }
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+        .card {
+            background: #21262d;
+            border: 1px solid #30363d;
+            padding: 15px;
+            border-radius: 6px;
+        }
+        .card h3 { color: var(--accent-color); margin-top: 0; }
+        a { color: var(--accent-color); text-decoration: none; }
+        a:hover { text-decoration: underline; }
+        
+        /* Interactive Section */
+        .interactive-box {
+            background: #000;
+            padding: 15px;
+            border-left: 3px solid var(--accent-color);
+            margin-top: 20px;
+        }
+        .input-line {
+            display: flex;
+            align-items: center;
+        }
+        .prompt { color: var(--accent-color); margin-right: 10px; }
+        input {
+            background: transparent;
+            border: none;
+            color: #fff;
+            font-family: inherit;
+            font-size: 1rem;
+            width: 100%;
+            outline: none;
+        }
+        #output {
+            margin-top: 10px;
+            color: #00ff66;
+            white-space: pre-line;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <h1>HARIVASAN // PENETRATION TESTER</h1>
+        <div class="badge">🔴 OSCP CERTIFIED</div>
+        <p style="color: var(--dim-text);">Specializing in Offensive Security, Infrastructure Hacking, and Vulnerability Research.</p>
+    </header>
+
+    <div class="terminal">
+        <div class="terminal-header">harivasan@sec-ops:~# interactive_console.sh</div>
+        <p>Welcome to my secure node. Type a command below to interact with the portfolio.</p>
+        <p style="color: var(--dim-text); font-size: 0.85rem;">Try typing: <strong>help</strong>, <strong>about</strong>, or <strong>root</strong></p>
+        
+        <div class="interactive-box">
+            <div class="input-line">
+                <span class="prompt">guest@harivasan_sec:$</span>
+                <input type="text" id="cmd-input" autofocus placeholder="type here..." onkeydown="handleCommand(event)">
+            </div>
+            <div id="output"></div>
+        </div>
+    </div>
+
+    <h2>📂 Featured Repositories & Write-ups</h2>
+    <div class="grid">
+        <div class="card">
+            <h3>Active Directory Lab</h3>
+            <p>Deployment scripts and attack methodology documentation for hacking enterprise AD environments.</p>
+            <a href="#">View Repository →</a>
+        </div>
+        <div class="card">
+            <h3>Buffer Overflow Exploit</h3>
+            <p>Custom Python exploit targeting an OSCP-like vulnerable Windows executable program.</p>
+            <a href="#">View Code →</a>
+        </div>
+    </div>
+</div>
+
+<script>
+    function handleCommand(event) {
+        if (event.key === 'Enter') {
+            const input = document.getElementById('cmd-input');
+            const output = document.getElementById('output');
+            const cmd = input.value.trim().toLowerCase();
+            
+            if (cmd === 'help') {
+                output.innerText = "Available commands:\n- about : Show background information\n- root  : Attempt system exploit\n- clear : Clear the terminal screen";
+            } else if (cmd === 'about') {
+                output.innerText = "[+] Certification: Offensive Security Certified Professional (OSCP)\n[+] Primary Focus: Penetration Testing / Red Teaming\n[+] Frameworks: MITRE ATT&CK, PTES";
+            } else if (cmd === 'root') {
+                output.innerText = "Running exploit payload...\n[!] Bypassing AV...\n[+] SUCCESS: Root access granted! Welcome back, Harivasan.";
+            } else if (cmd === 'clear') {
+                output.innerText = "";
+            } else if (cmd === '') {
+                output.innerText = "";
+            } else {
+                output.innerText = `Command not found: ${cmd}. Type 'help' for instructions.`;
+            }
+            input.value = '';
+        }
+    }
+</script>
+
+</body>
+</html>
