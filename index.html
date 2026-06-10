@@ -192,6 +192,32 @@
   .foot-meta{font-family:var(--mono);font-size:11px;color:var(--faint);line-height:1.9;text-align:right}
   .foot-meta .live{color:var(--accent)}
 
+  /* ───── BREACH GAME ───── */
+  .breach-sec{padding:clamp(70px,11vh,130px) 0}
+  .breach{position:relative;width:100%;height:clamp(420px,58vh,560px);border:1px solid var(--line);background:var(--bg-deep);overflow:hidden}
+  .breach canvas{display:block;width:100%;height:100%;touch-action:none;cursor:crosshair}
+  .bhud{position:absolute;top:0;left:0;width:100%;display:flex;justify-content:space-between;align-items:flex-start;padding:18px 22px;font-family:var(--mono);font-size:11px;pointer-events:none;z-index:2}
+  .bhud .lbl{color:var(--faint);font-size:10px;letter-spacing:.18em;text-transform:uppercase;margin-bottom:7px}
+  .bhud .score{font-family:var(--display);font-weight:800;font-size:clamp(26px,4vw,34px);letter-spacing:-.02em;color:var(--ink);line-height:1}
+  .bhud .right{text-align:right}
+  .bhud .access{font-family:var(--mono);font-size:11px;letter-spacing:.14em;color:var(--accent);margin-top:10px}
+  .bintegrity{width:140px;height:4px;background:rgba(255,255,255,.12);margin-left:auto;position:relative}
+  .bintegrity i{position:absolute;left:0;top:0;height:100%;width:100%;background:var(--accent);transition:width .25s}
+  .bcombo{position:absolute;left:50%;top:20px;transform:translateX(-50%);font-family:var(--display);font-weight:800;color:var(--accent);font-size:20px;opacity:0;transition:opacity .2s;z-index:2;pointer-events:none}
+  .bcombo.on{opacity:1}
+  .boverlay{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;gap:6px;padding:24px;z-index:3;background:rgba(5,5,6,.74);backdrop-filter:blur(3px);transition:opacity .4s,visibility .4s}
+  .boverlay.hide{opacity:0;visibility:hidden;pointer-events:none}
+  .boverlay .ttl{font-family:var(--display);font-weight:800;font-size:clamp(30px,6vw,56px);letter-spacing:-.02em;text-transform:uppercase;line-height:.92;margin-bottom:6px}
+  .boverlay .ttl em{font-style:normal;color:var(--accent)}
+  .boverlay .sub{font-family:var(--mono);font-size:12px;color:var(--dim);letter-spacing:.04em;max-width:42ch;line-height:1.7;margin-bottom:18px}
+  .boverlay .stat{font-family:var(--mono);font-size:13px;color:var(--dim);letter-spacing:.06em}
+  .boverlay .stat b{color:var(--ink)}
+  .bbtn{margin-top:18px;position:relative;font-family:var(--mono);font-size:13px;letter-spacing:.22em;text-transform:uppercase;padding:16px 42px;border:1px solid var(--line);border-radius:60px;color:var(--ink);cursor:pointer;background:transparent;overflow:hidden;transition:border-color .3s,color .3s}
+  .bbtn::before{content:"";position:absolute;inset:0;background:var(--accent);transform:translateY(101%);transition:transform .4s cubic-bezier(.76,0,.24,1);z-index:0}
+  .bbtn:hover{border-color:var(--accent);color:#fff}
+  .bbtn:hover::before{transform:translateY(0)}
+  .bbtn span{position:relative;z-index:1}
+
   @media(prefers-reduced-motion:reduce){
     *{animation:none!important;transition-duration:.001s!important}
     .rv>*,.fade,.gate-lines .ln>span,.enter{transform:none!important;opacity:1!important}
@@ -316,6 +342,37 @@
           <li>Designed automated frameworks reducing reporting intervals and asset-tracking latency.</li>
           <li>Maintained open-source dark-web observation configs verifying containment against data-theft dumps.</li>
         </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- BREACH GAME -->
+  <section class="breach-sec wrap">
+    <div class="eyebrow fade"><span class="n">//</span> Breach Simulation — Interactive</div>
+    <div class="breach" id="breach">
+      <canvas id="bcanvas"></canvas>
+      <div class="bhud">
+        <div>
+          <div class="lbl">Packets Intercepted</div>
+          <div class="score" id="bScore">0</div>
+        </div>
+        <div class="right">
+          <div class="lbl">Core Integrity</div>
+          <div class="bintegrity"><i id="bInt"></i></div>
+          <div class="access" id="bAccess">ACCESS LV.1</div>
+        </div>
+      </div>
+      <div class="bcombo" id="bCombo">x2</div>
+      <div class="boverlay" id="bStart">
+        <div class="ttl">Breach <em>Protocol</em></div>
+        <div class="sub">Data packets are converging on the core. Intercept them — click or tap — before they reach it. Every breach drops integrity. Chain hits for a combo.</div>
+        <button class="bbtn" id="bInit" data-cur><span>Initiate ▸</span></button>
+      </div>
+      <div class="boverlay hide" id="bOver">
+        <div class="ttl">Connection <em>Terminated</em></div>
+        <div class="stat">SCORE: <b id="bFinal">0</b></div>
+        <div class="stat">BEST RUN: <b id="bBest">0</b></div>
+        <button class="bbtn" id="bRetry" data-cur><span>Re-initiate ▸</span></button>
       </div>
     </div>
   </section>
@@ -495,6 +552,138 @@
       if(id.length>1){var t=document.querySelector(id);if(t){e.preventDefault();t.scrollIntoView({behavior:reduce?'auto':'smooth'});}}
     });
   });
+})();
+</script>
+<script>
+/* ───── BREACH PROTOCOL — mini-game ───── */
+(function(){
+  "use strict";
+  var canvas=document.getElementById('bcanvas');
+  if(!canvas) return;
+  var ctx=canvas.getContext('2d');
+  var box=document.getElementById('breach');
+  var reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var TAU=Math.PI*2;
+
+  var W=0,H=0,dpr=1,cx=0,cy=0;
+  function resize(){
+    var r=box.getBoundingClientRect();
+    W=r.width;H=r.height;
+    dpr=Math.min(window.devicePixelRatio||1,2);
+    canvas.width=Math.round(W*dpr);canvas.height=Math.round(H*dpr);
+    ctx.setTransform(dpr,0,0,dpr,0,0);
+    cx=W/2;cy=H/2;
+  }
+
+  var nodes=[];
+  function initNodes(){
+    nodes=[];var n=Math.round(Math.min(W,H)/52);
+    for(var i=0;i<n;i++) nodes.push({x:Math.random()*W,y:Math.random()*H,vx:(Math.random()-.5)*7,vy:(Math.random()-.5)*7});
+  }
+
+  var ACCENT='#ff3b30';
+  var state='idle',packets=[],particles=[];
+  var score=0,best=0,integrity=100,combo=1,lastHit=0,spawnT=0,elapsed=0,shake=0,coreR=32,corePulse=0,comboTO=null;
+
+  var elScore=document.getElementById('bScore'),elInt=document.getElementById('bInt'),
+      elAccess=document.getElementById('bAccess'),elCombo=document.getElementById('bCombo'),
+      elStart=document.getElementById('bStart'),elOver=document.getElementById('bOver'),
+      elFinal=document.getElementById('bFinal'),elBest=document.getElementById('bBest');
+
+  function reset(){packets=[];particles=[];score=0;integrity=100;combo=1;lastHit=0;spawnT=0;elapsed=0;shake=0;
+    elScore.textContent='0';elInt.style.width='100%';elAccess.textContent='ACCESS LV.1';}
+  function start(){reset();state='playing';elStart.classList.add('hide');elOver.classList.add('hide');}
+  function over(){state='over';if(score>best)best=score;elFinal.textContent=score;elBest.textContent=best;elOver.classList.remove('hide');}
+
+  function spawnPacket(){
+    var ang=Math.random()*TAU, rad=Math.hypot(W/2,H/2)+34;
+    var x=cx+Math.cos(ang)*rad, y=cy+Math.sin(ang)*rad;
+    var dx=cx-x,dy=cy-y,d=Math.hypot(dx,dy)||1;
+    packets.push({x:x,y:y,ux:dx/d,uy:dy/d,spd:Math.min(420,118+elapsed*5+score*0.55),r:6+Math.random()*2,trail:[]});
+  }
+  function burst(x,y,color){var n=reduce?6:15;for(var i=0;i<n;i++){var a=Math.random()*TAU,s=40+Math.random()*140;
+    particles.push({x:x,y:y,vx:Math.cos(a)*s,vy:Math.sin(a)*s,life:1,color:color});}}
+
+  function pointer(e){
+    if(state!=='playing')return;
+    var r=canvas.getBoundingClientRect();
+    var px=e.clientX-r.left,py=e.clientY-r.top,pick=-1,bd=40;
+    for(var i=0;i<packets.length;i++){var d=Math.hypot(packets[i].x-px,packets[i].y-py);if(d<bd){bd=d;pick=i;}}
+    if(pick>=0){
+      var p=packets[pick],now=performance.now();
+      combo=(now-lastHit<1200)?combo+1:1;lastHit=now;
+      score+=10*Math.min(combo,9);
+      burst(p.x,p.y,'#ffffff');packets.splice(pick,1);
+      elScore.textContent=score;elAccess.textContent='ACCESS LV.'+(Math.floor(score/150)+1);
+      if(combo>1){elCombo.textContent='x'+Math.min(combo,9);elCombo.classList.add('on');
+        clearTimeout(comboTO);comboTO=setTimeout(function(){elCombo.classList.remove('on');},750);}
+    }
+  }
+  canvas.addEventListener('pointerdown',pointer);
+  document.getElementById('bInit').addEventListener('click',start);
+  document.getElementById('bRetry').addEventListener('click',start);
+
+  function update(dt){
+    for(var i=0;i<nodes.length;i++){var nd=nodes[i];nd.x+=nd.vx*dt;nd.y+=nd.vy*dt;
+      if(nd.x<0||nd.x>W)nd.vx*=-1;if(nd.y<0||nd.y>H)nd.vy*=-1;}
+    corePulse+=dt;if(shake>0)shake=Math.max(0,shake-dt*60);
+    for(var i=particles.length-1;i>=0;i--){var pa=particles[i];pa.x+=pa.vx*dt;pa.y+=pa.vy*dt;pa.vx*=0.92;pa.vy*=0.92;pa.life-=dt*1.7;if(pa.life<=0)particles.splice(i,1);}
+    if(state!=='playing')return;
+    elapsed+=dt;spawnT-=dt;
+    var every=Math.max(0.40,1.15-elapsed*0.012-score*0.0014);
+    if(spawnT<=0){spawnPacket();spawnT=every;}
+    for(var i=packets.length-1;i>=0;i--){var p=packets[i];
+      if(!reduce){p.trail.push({x:p.x,y:p.y});if(p.trail.length>8)p.trail.shift();}
+      p.x+=p.ux*p.spd*dt;p.y+=p.uy*p.spd*dt;
+      if(Math.hypot(p.x-cx,p.y-cy)<coreR+4){
+        packets.splice(i,1);integrity-=12;combo=1;shake=reduce?0:11;
+        burst(cx+(p.x-cx)*0.6,cy+(p.y-cy)*0.6,ACCENT);
+        elInt.style.width=Math.max(0,integrity)+'%';
+        if(integrity<=0)over();
+      }
+    }
+  }
+  function draw(){
+    ctx.clearRect(0,0,W,H);ctx.save();
+    if(shake>0)ctx.translate((Math.random()-.5)*shake,(Math.random()-.5)*shake);
+    ctx.strokeStyle='rgba(255,255,255,0.035)';ctx.lineWidth=1;var gs=44;
+    for(var x=0;x<W;x+=gs){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,H);ctx.stroke();}
+    for(var y=0;y<H;y+=gs){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(W,y);ctx.stroke();}
+    ctx.strokeStyle='rgba(255,255,255,0.05)';
+    for(var i=0;i<nodes.length;i++)for(var j=i+1;j<nodes.length;j++){var a=nodes[i],b=nodes[j],dd=Math.hypot(a.x-b.x,a.y-b.y);
+      if(dd<118){ctx.globalAlpha=1-dd/118;ctx.beginPath();ctx.moveTo(a.x,a.y);ctx.lineTo(b.x,b.y);ctx.stroke();}}
+    ctx.globalAlpha=1;
+    for(var i=0;i<nodes.length;i++){ctx.fillStyle='rgba(255,255,255,0.16)';ctx.beginPath();ctx.arc(nodes[i].x,nodes[i].y,1.6,0,TAU);ctx.fill();}
+    var pr=coreR+Math.sin(corePulse*3)*3;
+    var grd=ctx.createRadialGradient(cx,cy,2,cx,cy,pr*2.5);
+    grd.addColorStop(0,'rgba(255,59,48,0.45)');grd.addColorStop(1,'rgba(255,59,48,0)');
+    ctx.fillStyle=grd;ctx.beginPath();ctx.arc(cx,cy,pr*2.5,0,TAU);ctx.fill();
+    ctx.strokeStyle=ACCENT;ctx.lineWidth=2;ctx.beginPath();ctx.arc(cx,cy,pr,0,TAU);ctx.stroke();
+    ctx.fillStyle='rgba(255,59,48,0.13)';ctx.beginPath();ctx.arc(cx,cy,pr,0,TAU);ctx.fill();
+    ctx.save();ctx.translate(cx,cy);ctx.rotate(corePulse*0.6);ctx.strokeStyle='rgba(255,59,48,0.65)';ctx.lineWidth=2;
+    for(var k=0;k<6;k++){ctx.rotate(Math.PI/3);ctx.beginPath();ctx.moveTo(pr+5,0);ctx.lineTo(pr+11,0);ctx.stroke();}ctx.restore();
+    for(var i=0;i<packets.length;i++){var p=packets[i];
+      for(var t=0;t<p.trail.length;t++){var tt=p.trail[t],al=t/p.trail.length*0.45;
+        ctx.fillStyle='rgba(255,255,255,'+al+')';ctx.beginPath();ctx.arc(tt.x,tt.y,p.r*(t/p.trail.length)*0.7,0,TAU);ctx.fill();}
+      ctx.save();ctx.translate(p.x,p.y);ctx.rotate(Math.PI/4);ctx.shadowColor=ACCENT;ctx.shadowBlur=12;
+      ctx.fillStyle='#fff';ctx.fillRect(-p.r/2,-p.r/2,p.r,p.r);
+      ctx.strokeStyle=ACCENT;ctx.lineWidth=1.5;ctx.strokeRect(-p.r/2-2,-p.r/2-2,p.r+4,p.r+4);ctx.restore();}
+    ctx.shadowBlur=0;
+    for(var i=0;i<particles.length;i++){var pa=particles[i];ctx.globalAlpha=Math.max(0,pa.life);ctx.fillStyle=pa.color;
+      ctx.beginPath();ctx.arc(pa.x,pa.y,2.4,0,TAU);ctx.fill();}
+    ctx.globalAlpha=1;ctx.restore();
+  }
+
+  var last=0,raf=null,running=false;
+  function frame(t){if(!running)return;var dt=Math.min((t-last)/1000||0,0.05);last=t;update(dt);draw();raf=requestAnimationFrame(frame);}
+  function go(){if(!running){running=true;last=performance.now();raf=requestAnimationFrame(frame);}}
+  function stop(){running=false;if(raf)cancelAnimationFrame(raf);}
+
+  resize();initNodes();
+  window.addEventListener('resize',function(){resize();initNodes();});
+  new IntersectionObserver(function(en){en.forEach(function(x){
+    if(x.isIntersecting){resize();if(!nodes.length)initNodes();go();}else{stop();}});
+  },{threshold:0.12}).observe(box);
 })();
 </script>
 </body>
